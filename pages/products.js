@@ -12,7 +12,6 @@ export default function Products() {
         const data = async () => {
             const apiData = await axios.get('/api/products')
             setProducts(apiData.data)
-            // console.log(apiData.data)
         } 
 
         data()
@@ -22,6 +21,8 @@ export default function Products() {
         //     console.log(res.data);
         // })
     }, [])
+
+    
 
     return (
 
