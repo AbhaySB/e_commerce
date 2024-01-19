@@ -13,7 +13,6 @@ export default function Products() {
             const apiData = await axios.get('/api/products')
             setProducts(apiData.data)
         } 
-
         data()
 
         // axios.get('/api/products').then(res => {
