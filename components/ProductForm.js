@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { CldUploadButton, CldImage } from 'next-cloudinary';
 
@@ -9,18 +9,28 @@ export default function ProductForm({
     name: existingName,
     description: existingDescription,
     price: existingPrice,
-    imageId: existingImageId
+    imageId: existingImageId,
+    category: existingCategory
 }) {
 
     const [name, setName] = useState(existingName || '');
     const [description, setDescription] = useState(existingDescription || '');
     const [price, setPrice] = useState(existingPrice || '');
     const [goToProduct, setGoToProduct] = useState(false)
-    const [imageId, setImageId] = useState(existingImageId || '')
+    const [imageId, setImageId] = useState(existingImageId || '');
+    const [categories, setCategories] = useState([]);
+    const [category, setCategory] = useState(existingCategory || '')
     const router = useRouter();
 
+    useEffect(() => {
+        axios.get('/api/categories').then(result => {
+            setCategories(result.data)
+            console.log(categories);
+        })
+    }, [])
+
     async function createProduct(e) {
-        const data = { name, description, price, imageId }
+        const data = { name, description, price, imageId, category }
         e.preventDefault();
         if (_id) {
             await axios.put('/api/products', { ...data, _id });
@@ -55,6 +65,15 @@ export default function ProductForm({
                 value={name}
                 onChange={e => setName(e.target.value)}
             />
+
+            <label>Category</label>
+            <select value={category} onChange={e => setCategory(e.target.value)}>
+                <option value="">None</option>
+                {categories.length > 0 && categories.map(e => (
+                    <option value={e._id}>{e.name}</option>
+                ))}
+            </select>
+
             <label>Photos</label>
             <div className="mb-2">
                 {/* <label className="w-24 h-24 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-gray-500 rounded-lg bg-gray-100">

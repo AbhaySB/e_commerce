@@ -9,12 +9,7 @@ function Categories({ swal }) {
     const [categories, setCategories] = useState([])
     const [parentCategory, setParentCategory] = useState('')
     const [editing, setEditing] = useState(null)
-
-    function fetchCategories() {
-        axios.get('/api/categories').then(result => {
-            setCategories(result.data)
-        })
-    }
+    const [properties, setProperties] = useState([])
 
     useEffect(() => {
         // const data = async () => {
@@ -24,6 +19,16 @@ function Categories({ swal }) {
         // data()
         fetchCategories()
     }, [])
+
+    function fetchCategories() {
+        try {
+            axios.get('/api/categories').then(result => {
+                setCategories(result.data)
+            })
+        } catch (error) {
+            alert(error);
+        }
+    }
 
     async function saveCategory(event) {
         event.preventDefault()
@@ -37,6 +42,7 @@ function Categories({ swal }) {
             await axios.post('/api/categories', data);
         }
         setName('');
+        setParentCategory('')
         fetchCategories()
     }
 
@@ -46,7 +52,7 @@ function Categories({ swal }) {
         setParentCategory(category?.parent?._id)
     }
 
-    function deleteCategory(category) {
+    async function deleteCategory(category) {
         swal.fire({
             title: 'Are you sure?',
             text: `Do you want to delete ${category.name}?`,
@@ -61,29 +67,52 @@ function Categories({ swal }) {
                 fetchCategories();
             }
         })
+        // const canDelete = confirm("Want to delete?")
+        // if(!canDelete) return;
+        // const { _id } = category;
+        // await axios.delete('/api/categories?_id=' + _id);
+        // fetchCategories();
+    }
+
+    function addProperty() {
+        setProperties(e => {
+            return [...e, { name: '', values: '' }]
+        })
     }
 
     return (
         <Layout>
             <h1 className="mb-5">Categories</h1>
             <label>{editing ? `Edit Category ${editing.name}` : 'Create New Categories'}</label>
-            <form onSubmit={saveCategory} className="flex gap-1 mt-2">
-                <input className="mb-0 pt-1"
-                    type="text"
-                    placeholder="Categories name"
-                    onChange={e => setName(e.target.value)}
-                    value={name}
-                />
-                <select className="mb-0"
-                    value={parentCategory}
-                    onChange={e => setParentCategory(e.target.value)}
-                >
-                    <option value="">No parent Category</option>
-                    {categories?.length > 0 && categories.map(category => (
-                        <option key={category._id} value={category._id}>{category.name}</option>
+            <form onSubmit={saveCategory} className="mt-2">
+                <div className="flex gap-1">
+                    <input className="pt-1 mb-0"
+                        type="text"
+                        placeholder="Categories name"
+                        onChange={e => setName(e.target.value)}
+                        value={name}
+                    />
+                    <select className="mb-0"
+                        onChange={e => setParentCategory(e.target.value)}
+                        value={parentCategory}
+                    >
+                        <option value="">No parent Category</option>
+                        {categories.length > 0 && categories.map(category => (
+                            <option key={category._id} value={category._id}>{category.name}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mt-2">
+                    <label className="block">Properties</label>
+                    <button className="btn-default" type="button" onClick={addProperty}>Add Properties</button>
+                    {properties.length > 0 && properties.map(property => (
+                        <div className="flex gap-1">
+                            <input type="text" value={property.name} placeholder="Property Name" />
+                            <input type="text" value={property.values} placeholder="Value" />
+                        </div>
                     ))}
-                </select>
-                <button className="btn-primary" type="submit">Save</button>
+                </div>
+                <button className="btn-primary mt-2" type="submit">Save</button>
             </form>
             <table className="basic mt-4">
                 <thead>
