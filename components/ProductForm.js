@@ -58,8 +58,7 @@ export default function ProductForm({
     //         console.log(res.data);
     //     }
     //     console.log(files);
-    // }
-
+    //
     const propertiesToFill = []
     if (categories.length > 0 && category) {
         let selCatInfo = categories.find(({ _id }) => _id === category);
@@ -96,8 +95,9 @@ export default function ProductForm({
             </select>
 
             {propertiesToFill.length > 0 && propertiesToFill.map(p => (
-                <div className="flex gap-2">
-                    <div>{p.name}</div>
+                <div className="">
+                    <label>{p.name[0].toUpperCase() + p.name.substring(1)}</label>
+                    <div>
                     <select
                         value={productProperties[p.name]}
                         onChange={e => setProductProp(p.name, e.target.value)}>
@@ -105,6 +105,7 @@ export default function ProductForm({
                             <option value={v}>{v}</option>
                         ))}
                     </select>
+                    </div>
                 </div>
             ))}
 
@@ -137,7 +138,7 @@ export default function ProductForm({
                             sizes="100vw"
                             alt="Description of my image"
                         />)}
-                    <CldUploadButton className="w-44 h-32 mt-3 cursor-pointer text-center flex flex-col items-center justify-center text-sm gap-1 text-gray-500 rounded-lg bg-gray-100"
+                    <CldUploadButton className="w-44 h-32 mt-3 cursor-pointer text-center flex flex-col items-center justify-center text-md gap-1 text-gray-500 rounded-lg bg-gray-100 border shadow-md border-gray-200"
 
                         onUpload={(result) => {
                             setImageId(result.info.public_id);

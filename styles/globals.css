@@ -5,7 +5,7 @@
 input,
 textarea,
 select{
-  @apply border-2 border-gray-300 rounded-md px-2 pb-1 w-full mb-2;
+  @apply border border-gray-200 bg-white shadow-sm rounded-sm px-2 pb-1 w-full mb-2 p-2;
 }
 
 input:focus,
@@ -15,23 +15,23 @@ select:focus {
 }
 
 h1 {
-  @apply mb-2 text-xl;
+  @apply mb-4 text-xl text-gray-800;
 }
 
 label {
-  @apply text-blue-900;
+  @apply text-gray-700;
 }
 
 table.basic tr td {
-  @apply border border-blue-400 p-1;
+  @apply  px-4 py-1;
 }
 
 table.basic {
-  @apply w-full mt-4;
+  @apply w-full mt-4 bg-gray-50 rounded-sm shadow-md;
 }
 
-table.basic thead{
-    @apply bg-blue-100
+table.basic thead tr td{
+    @apply uppercase text-gray-600 border-b border-gray-300 px-4 py-2
 }
 
 table.basic a{
@@ -51,5 +51,5 @@ table.basic a{
 }
 
 .btn-primary{
-  @apply px-5 py-1 rounded-md bg-blue-800 text-white
+  @apply px-5 py-1 rounded-md bg-primary text-white mx-1
 }
